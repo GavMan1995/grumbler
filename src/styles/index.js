@@ -5,17 +5,25 @@ import { Button } from '@material-ui/core'
 import colors from '../variables/colors'
 
 export default theme => ({
+  cardContainer: {
+    margin: '0 calc(50% - 300px)',
+    [theme.breakpoints.down('sm')]: {
+      margin: '0 24px'
+    }
+  },
+  placesCardContainer: {
+    width: '100%',
+    margin: '0 calc(50% - 300px)',
+    [theme.breakpoints.down('sm')]: {
+      margin: '0 24px'
+    }
+  },
   placesCard: {
-    maxWidth: 800,
-    minWidth: 500,
-    marginTop: 60
+    marginTop: 24,
+    width: '100%'
   },
   searchForm: {
-    margin: '0px calc(50% - 300px)',
-    marginTop: 60,
-    '& .search-field': {
-
-    }
+    marginTop: 60
   },
 
   foodTypeButton: {

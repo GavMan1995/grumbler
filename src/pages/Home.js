@@ -46,103 +46,109 @@ class Home extends Component {
 
     if (placesResults.length === 0) {
       return (
-        <Card className={classes.searchForm}>
-          <div id='map' />
-          <CardContent>
-            <Grid container className={classes.fullWidth}>
-              <Grid item className={classes.fullWidth}>
-                <Typography className={classes.fullWidth} variant='caption'>Select food types to include in search.</Typography>
+        <div className={classes.cardContainer}>
+          <Card className={classes.searchForm}>
+            <div id='map' />
+            <CardContent>
+              <Grid container className={classes.fullWidth}>
+                <Grid item className={classes.fullWidth}>
+                  <Typography className={classes.fullWidth} variant='caption'>Select food types to include in search.</Typography>
+                </Grid>
+
+                {foodTypeArr.map((type, key) => {
+                  return (
+                    <Grid
+                      item
+                      xs={3} lg={4}
+                      onClick={() => this.toggleFoodType(type)}
+                      key={`${type}${key}`}
+                      className={classNames(classes.foodTypeButton, selectedFoodTypes.includes(type) && 'selected')}>
+                      <Typography align='center' className={classes.FullWidth}>{type}</Typography>
+                    </Grid>
+                  )
+                })}
+
+                <form onSubmit={this.addFoodType} className={classes.fullWidth}>
+                  <TextField
+                    fullWidth
+                    style={{ marginTop: 24 }}
+                    variant='outlined'
+                    value={newType}
+                    onChange={this.handleInputChange('newType')}
+                    placeholder='Add Food Type (press enter)'
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position='end'>
+                          <Add />
+                        </InputAdornment>
+                      )
+                    }} />
+                </form>
               </Grid>
 
-              {foodTypeArr.map((type, key) => {
-                return (
-                  <Grid
-                    item
-                    sm={2} lg={4}
-                    onClick={() => this.toggleFoodType(type)}
-                    key={`${type}${key}`}
-                    className={classNames(classes.foodTypeButton, selectedFoodTypes.includes(type) && 'selected')}>
-                    <Typography align='center' className={classes.FullWidth}>{type}</Typography>
-                  </Grid>
-                )
-              })}
+              <Grid container className={classes.fullWidth}>
+                <Grid item className={classes.fullWidth}>
+                  <Typography className={classes.fullWidth} variant='caption'>Select price point and max distance.</Typography>
+                </Grid>
 
-              <form onSubmit={this.addFoodType} className={classes.fullWidth}>
-                <TextField
-                  fullWidth
-                  style={{ marginTop: 24 }}
-                  variant='outlined'
-                  value={newType}
-                  onChange={this.handleInputChange('newType')}
-                  placeholder='Add Food Type (press enter)'
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position='end'>
-                        <Add />
-                      </InputAdornment>
-                    )
-                  }} />
-              </form>
-            </Grid>
-
-            <Grid container className={classes.fullWidth}>
-              <Grid item className={classes.fullWidth}>
-                <Typography className={classes.fullWidth} variant='caption'>Select price point and max distance.</Typography>
+                {priceArr.map((price, key) => {
+                  return (
+                    <Grid
+                      item
+                      xs={4}
+                      onClick={() => this.select('selectedPrice', price)}
+                      key={`${price}${key}`}
+                      className={classNames(classes.foodTypeButton, selectedPrice === price && 'selected')}>
+                      <Typography align='center' className={classes.FullWidth}>{price}</Typography>
+                    </Grid>
+                  )
+                })}
+                {distanceArr.map((distance, key) => {
+                  return (
+                    <Grid
+                      item
+                      xs={4}
+                      onClick={() => this.select('selectedDistance', distance.distance)}
+                      key={`${distance.distance}${key}`}
+                      className={classNames(classes.foodTypeButton, selectedDistance === distance.distance && 'selected')}>
+                      <Typography align='center' className={classes.FullWidth}>{distance.name}</Typography>
+                    </Grid>
+                  )
+                })}
               </Grid>
 
-              {priceArr.map((price, key) => {
-                return (
-                  <Grid
-                    item
-                    sm={2} lg={4}
-                    onClick={() => this.select('selectedPrice', price)}
-                    key={`${price}${key}`}
-                    className={classNames(classes.foodTypeButton, selectedPrice === price && 'selected')}>
-                    <Typography align='center' className={classes.FullWidth}>{price}</Typography>
-                  </Grid>
-                )
-              })}
-              {distanceArr.map((distance, key) => {
-                return (
-                  <Grid
-                    item
-                    sm={2} lg={4}
-                    onClick={() => this.select('selectedDistance', distance.distance)}
-                    key={`${distance.distance}${key}`}
-                    className={classNames(classes.foodTypeButton, selectedDistance === distance.distance && 'selected')}>
-                    <Typography align='center' className={classes.FullWidth}>{distance.name}</Typography>
-                  </Grid>
-                )
-              })}
-            </Grid>
-
-            <TextField
-              fullWidth
-              style={{ marginTop: 24 }}
-              variant='outlined'
-              value={searchValue}
-              onChange={this.handleInputChange('searchValue')}
-              placeholder='Food Type or Restaurant Name (optional)'
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position='end'>
-                    <Search />
-                  </InputAdornment>
-                )
-              }} />
-          </CardContent>
-          <CardActions>
-            <div className={classNames(classes.fullWidth, classes.displayFlex, classes.horizontalCenter)}>
-              <Button size='large' color='primary' variant='contained' onClick={this.search}>FIND ME FOOD</Button>
-            </div>
-          </CardActions>
-        </Card>
+              <TextField
+                fullWidth
+                style={{ marginTop: 24 }}
+                variant='outlined'
+                value={searchValue}
+                onChange={this.handleInputChange('searchValue')}
+                placeholder='Food Type or Restaurant Name (optional)'
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position='end'>
+                      <Search />
+                    </InputAdornment>
+                  )
+                }} />
+            </CardContent>
+            <CardActions>
+              <div className={classNames(classes.fullWidth, classes.displayFlex, classes.horizontalCenter)}>
+                <Button size='large' color='primary' variant='contained' onClick={this.search}>FIND ME FOOD</Button>
+              </div>
+            </CardActions>
+          </Card>
+        </div>
       )
     } else {
       return (
         <Grid container justify='center' alignContent='center'>
-          <Typography variant='h6' onClick={() => window.location.reload(true)}><Button>Reset <Autorenew /></Button></Typography>
-          <PlacesCard key={placesResults[currentPlace].name} place={placesResults[currentPlace]} decline={this.decline} classes={classes} />
+          <Grid container className={classes.fullWidth} style={{ marginTop: 60 }} justify='center'>
+            <Button onClick={() => window.location.reload(true)} variant='contained' size='large' color='primary'>Reset <Autorenew /></Button>
+          </Grid>
+          <div className={classes.placesCardContainer}>
+            <PlacesCard key={placesResults[currentPlace].name} place={placesResults[currentPlace]} decline={this.decline} classes={classes} />
+          </div>
         </Grid>
       )
     }
@@ -193,11 +199,11 @@ class Home extends Component {
     })
     const service = new window.google.maps.places.PlacesService(map)
     const request = {
-      query: `${selectedFoodTypes.join('|')}|${searchValue && `|${searchValue}`}`,
+      query: `${selectedFoodTypes.join('|')}${searchValue !== '' ? `|${searchValue}` : ''}`,
       location: googleLocation,
       radius: selectedDistance * 1610,
       minPriceLevel: selectedPrice.length,
-      type: ['restaurant']
+      type: ['food']
     }
     console.log(request)
     service.textSearch(request, (results, status) => {
